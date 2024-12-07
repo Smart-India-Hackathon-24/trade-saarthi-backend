@@ -17,7 +17,6 @@ def get_restricted_lists(type):
     prefix_suffix = ["prefix", "suffix"]
     return words if type == "words" else prefix_suffix
 
-
 def check_title_in_restricted_lists(title, type):
     restricted_words = get_restricted_lists(type)
     invalid_words = []

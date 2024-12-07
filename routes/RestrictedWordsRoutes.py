@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Query
 from functions.RestrictedListsFunctions import *
 
-
 restricted_words_router = APIRouter(
     prefix="/restricted_words", tags=["Restricted Words"]
 )
