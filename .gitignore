@@ -2,3 +2,4 @@ test*
 .vscode
 env*
 .env
+__pycache__
