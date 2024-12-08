@@ -4,6 +4,7 @@ import os
 import uvicorn
 from routes.RestrictedWordsRoutes import restricted_words_router
 from routes.RestrictedPrefixSuffixRoutes import restricted_prefix_suffix_router
+from config.RedisConfig import get_redis_client
 
 app = FastAPI(
     title="Trade Mark Sarthi", description="apis for new paper ", version="1.0.0"
@@ -19,9 +20,23 @@ app.add_middleware(
 )
 
 
-@app.get("/", tags=["Root"])
+@app.get("/", tags=["Health Check"])
 async def root():
     return {"status": "success", "message": "Server is running!"}
+
+@app.get("/test-redis", tags=["Health Check"])
+async def test_redis():
+    try:
+        redis_client = get_redis_client()
+        redis_client.set("test", "Hello Redis!")
+        value = redis_client.get("test")
+        return {
+            "status": "success",
+            "message": "Redis is working!",
+            "test_value": value,
+        }
+    except Exception as e:
+        return {"status": "error", "message": f"Redis error: {str(e)}"}
 
 
 # All Validate Title Routes
