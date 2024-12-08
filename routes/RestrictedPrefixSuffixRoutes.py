@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Query
 from functions.RestrictedListsFunctions import *
-from config.RedisConfig import get_redis_client
+from functions.AddCacheToRedis import set_cache, get_cache
 
 
 restricted_prefix_suffix_router = APIRouter(
@@ -11,13 +11,12 @@ restricted_prefix_suffix_router = APIRouter(
 @restricted_prefix_suffix_router.get("/get")
 async def restricted_prefix_suffix():
     try:
-        redis_client = get_redis_client()
-        cached_words = redis_client.get("restricted_prefix_suffix")
+        cached_words = get_cache("restricted_prefix_suffix")
         if cached_words:
             return cached_words
         
         words = get_restricted_lists("prefix_suffix")
-        redis_client.set("restricted_prefix_suffix", words)
+        set_cache("restricted_prefix_suffix", words)
         return words
     except Exception as e:
         return get_restricted_lists("prefix_suffix")
@@ -28,9 +27,8 @@ async def check_restricted_prefix_suffix(
     title: str = Query(..., description="Title to check for restricted prefix suffix")
 ):
     try:
-        redis_client = get_redis_client()
         cache_key = f"restricted_prefix_suffix_check:{title.lower()}"
-        cached_result = redis_client.get(cache_key)
+        cached_result = get_cache(cache_key)
         
         if cached_result:
             return cached_result
@@ -43,7 +41,7 @@ async def check_restricted_prefix_suffix(
             "invalid_words": result["invalid_words"],
         }
         
-        redis_client.set(cache_key, response, ex=3600)  # Cache for 1 hour
+        set_cache(cache_key, response, expiry_seconds=3600)  # Cache for 1 hour
         return response
     except Exception as e:
         result = check_title_in_restricted_lists(title.lower(), "prefix_suffix")

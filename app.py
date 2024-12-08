@@ -5,6 +5,7 @@ import uvicorn
 from routes.RestrictedWordsRoutes import restricted_words_router
 from routes.RestrictedPrefixSuffixRoutes import restricted_prefix_suffix_router
 from config.RedisConfig import get_redis_client
+import json
 
 app = FastAPI(
     title="Trade Mark Sarthi", description="apis for new paper ", version="1.0.0"
@@ -24,7 +25,8 @@ app.add_middleware(
 async def root():
     return {"status": "success", "message": "Server is running!"}
 
-@app.get("/test-redis", tags=["Health Check"])
+
+@app.get("/test-redis", tags=["Redis APIs"])
 async def test_redis():
     try:
         redis_client = get_redis_client()
@@ -37,6 +39,35 @@ async def test_redis():
         }
     except Exception as e:
         return {"status": "error", "message": f"Redis error: {str(e)}"}
+
+
+@app.get("/cache-status", tags=["Redis APIs"])
+async def get_cache_status():
+    try:
+        redis_client = get_redis_client()
+        # Get all keys
+        all_keys = redis_client.keys("*")
+
+        cache_data = {}
+        for key in all_keys:
+            value = redis_client.get(key)
+            # Try to decode JSON values
+            try:
+                decoded_value = json.loads(value)
+            except (json.JSONDecodeError, TypeError):
+                decoded_value = value.decode('utf-8') if isinstance(value, bytes) else value
+                
+            # Get TTL for each key
+            ttl = redis_client.ttl(key)
+            cache_data[key] = {"value": decoded_value, "ttl_seconds": ttl}
+
+        return {
+            "status": "success",
+            "cached_items_count": len(all_keys),
+            "cached_data": cache_data,
+        }
+    except Exception as e:
+        return {"status": "error", "message": f"Error fetching cache data: {str(e)}"}
 
 
 # All Validate Title Routes
