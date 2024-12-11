@@ -94,112 +94,10 @@ async def unified_endpoint(title:str):
         # Combine the lines into a single output string
         output_string = "\n".join(output_lines)
 
-        return {"status": "success","final_output":d},200
+        return {"status": "success","results":results,"final_output":d}
     
     except Exception as e:
-        return {"status":"failed","message":f"Internal Server Error {e}"},500
-
-
-def chatbot(message1: str, function1_return: bool, function2_return: bool, function3_return: bool, function4_return: bool, function5_return: bool, function6_return: bool) -> str:   
-    system_prompt = f"""
-    As a conversational AI expert, your role involves explaining the outcomes of title registration for newspapers or magazines. If there are any issues or failures related to registering a new title, explain them.
-
-    Validate the title based on the following rules:
-    1. Titles should not contain any restricted word.
-    2. Titles should not start with any restricted prefix or end with and restricted suffix.
-    3. Titles must not be combinations of existing titles. If invalid, explain why.
-    4. Titles must not differ from existing titles only by spaces. If invalid, explain why.
-    5. Titles should have a minimum length of 2 words.
-    6. Titles should not contain any special characters.
-
-    Validation Results:
-    - Rule 1: {'Passed' if function1_return else 'Failed'}.
-    - Rule 2: {'Passed' if function2_return else 'Failed'}.
-    - Rule 3: {'Passed' if function3_return else 'Failed'}.
-    - Rule 4: {'Passed' if function4_return else 'Failed'}.
-    - Rule 5: {'Passed' if function5_return else 'Failed'}.
-    - Rule 6: {'Passed' if function6_return else 'Failed'}.
-
-    Make a paragraph related to failed rules only and how to rectify them.
-
-    """
-
-
-    chat_bot_prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", system_prompt),
-            ("human", ""),
-        ]
-    )
-
-    chat_bot = ChatGroq(
-        temperature=0,
-        groq_api_key=os.environ.get("GROQ_API"),
-        model_name="llama3-8b-8192",
-    )
-
-    chat_bot_chain = chat_bot_prompt | chat_bot | StrOutputParser()
-
-    res = chat_bot_chain.invoke({"message": message1})
-    return res
-
-
-@app.post("/get_report")
-async def report(title:str):
-    try:
-        api_map={
-            "Restricted Words":check_restricted_words,
-            "Restricted Prefix/Suffix":check_restricted_prefix_suffix,
-            "Title Combination":get_all_combinated_data,
-            "Space No_Space":get_space_nospace_data,
-            "Check Minimum Title Length":check_minimum_word,
-            "Check Special Characters":check_special_character
-        }
-        
-        results={}
-        for name,func in api_map.items():
-            results[name]=await func(title)
-        # print(results)
-
-        def extract_is_valid(response):
-            if isinstance(response, CommonResponse):
-                return response.isValid
-            elif isinstance(response, dict):
-                return response.get("isValid", None)
-            elif isinstance(response, tuple) and isinstance(response[0], CommonResponse):
-                return response[0].isValid
-            return None
-
-        # result_str = f"""function(
-        #     "{title}", 
-        #     {extract_is_valid(results["Restricted Words"])}, # Restricted Words
-        #     {extract_is_valid(results["Restricted Prefix/Suffix"])}, # Restricted Prefix/Suffix
-        #     {extract_is_valid(results["Title Combination"])}, # Title Combination
-        #     {extract_is_valid(results["Space No_Space"])}, # Space No_Space
-        #     {extract_is_valid(results["Check Minimum Title Length"])} # Check Minimum Title Length
-        # );"""
-        # Generate the output lines
-        output_lines = []
-        d={}
-        for key, response in results.items():
-            is_valid = extract_is_valid(response)
-            d[key.upper()] = is_valid
-            # output_lines.append(f"{key.upper()} : {str(is_valid).upper()}")
-        
-        # Combine the lines into a single output string
-        output_string = "\n".join(output_lines)
-
-        keys_value = list(d.values())
-        
-        # ['RESTRICTED WORDS', 'RESTRICTED PREFIX/SUFFIX', 'TITLE COMBINATION', 'SPACE NO_SPACE', 'CHECK MINIMUM TITLE LENGTH', 'CHECK SPECIAL CHARACTERS']
-
-        responce =chatbot("",*keys_value[:6])
-        # print(responce)
-
-        return {"status": "success","final_output":responce},200
-
-    except Exception as e:
-        return {"status":"failed","message":f"Internal Server Error {e}"},500
+        return {"status":"failed","message":f"Internal Server Error {e}"}
 
 
 @app.post("/check_min_word")
@@ -211,24 +109,24 @@ async def check_minimum_word(title:str):
                 input_title=title,
                 isValid=False,
                 invalid_words=[],
-                Message="Title is required"
-            ),400
+                message="Title is required"
+            )
 
         return CommonResponse(
                 status="success",
                 input_title=title,
                 isValid=len(title.split())>1,
                 invalid_words=[],
-                Message=f"{title} has {len(title.split())} words"
-            ),200
+                message=f"{title} has {len(title.split())} words"
+            )
     except Exception as e:
         return CommonResponse(
                 status="failed",
                 input_title=title,
                 isValid=False,
                 invalid_words=[],
-                Error=f"Internal Server Error {e}"
-            ),500
+                error=f"Internal Server Error {e}"
+            )
 
 
 def contains_special_characters(string: str) -> bool:
@@ -247,8 +145,8 @@ async def check_special_character(title:str):
                 input_title=title,
                 isValid=False,
                 invalid_words=[],
-                Message="Title is required"
-            ),400
+                message="Title is required"
+            )
         print(re.search(pattern,title))
         if bool(re.search(pattern,title)):
             return CommonResponse(
@@ -256,15 +154,15 @@ async def check_special_character(title:str):
                 input_title=title,
                 isValid=False,
                 invalid_words=[],
-                Message=f"{title} has special characters which are not allowed "
-            ),200
+                message=f"{title} has special characters which are not allowed "
+            )
         return CommonResponse(
                 status="success",
                 input_title=title,
                 isValid=True,
                 invalid_words=[],
-                Message=f"{title} is allowed "
-            ),200
+                message=f"{title} is allowed "
+            )
     
     except Exception as e:
         return CommonResponse(
@@ -272,8 +170,8 @@ async def check_special_character(title:str):
                     input_title=title,
                     isValid=False,
                     invalid_words=[],
-                    Error=f"Internal Server Error {e}"
-                ),500
+                    error=f"Internal Server Error {e}"
+                )
 
 # All Validate Title Routes
 app.include_router(restricted_words_router)

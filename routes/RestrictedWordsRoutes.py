@@ -54,19 +54,15 @@ async def check_restricted_words(
         title_words = title.lower().split()
         invalid_words = [word for word in title_words if word in words]
         
-        response = {
-            "status": "success",
-            "input_title": title,
-            "isValid": len(invalid_words) == 0,
-            "invalid_words": invalid_words,
-        }
-        set_cache(cache_key, response, expiry_seconds=3600)  # Cache for 1 hour
-        return CommonResponse(
+        response = CommonResponse(
                 status="success",
                 input_title=title,
                 isValid=len(invalid_words) == 0,
                 invalid_words=invalid_words,
-            ),200
+                message="Check The Restricted Words like Police, Crime"
+            )
+        set_cache(cache_key, response, expiry_seconds=3600)  # Cache for 1 hour
+        return response
     except Exception as e:
         # return {"status": "error", "message": str(e)}
         return CommonResponse(
@@ -74,5 +70,5 @@ async def check_restricted_words(
                 input_title=title,
                 isValid=False,
                 invalid_words=[],
-                Error=f"Internal Server Error {e}"
-            ),500
+                error=f"Internal Server Error {e}"
+            )
