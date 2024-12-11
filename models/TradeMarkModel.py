@@ -32,5 +32,5 @@ class CommonResponse(BaseModel):
     input_title: Optional[str] = None
     isValid: Optional[bool] = None
     invalid_words: Optional[List[str]] = None
-    Message: Optional[str] = None
-    Error:Optional[str]=None
+    message: Optional[str] = None
+    error:Optional[str]=None
