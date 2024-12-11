@@ -1,26 +1,11 @@
 from fastapi import APIRouter, Query
 from functions.RestrictedListsFunctions import *
-import csv
+from models.TradeMarkModel import CommonResponse
 from config.database import get_collection
 title_combination_router = APIRouter(
     prefix="/title_combination", tags=["Title Combination"]
 )
 
-
-# def read_column_from_csv(column_name='Title Name'):
-#     column_values = []
-#     # Use absolute path from root directory
-#     file_path = '/app/dataFiles/final.csv'
-    
-#     try:
-#         with open(file_path, 'r', encoding='utf-8') as csvfile:
-#             csv_reader = csv.DictReader(csvfile)
-#             for row in csv_reader:
-#                 column_values.append(row[column_name])
-#         return column_values
-#     except FileNotFoundError:
-#         # Return empty list if file not found
-#         return []
 
 def read_column_from_db(column_name='Title_Name'):
     column_values = []
@@ -50,8 +35,9 @@ def read_column_from_db(column_name='Title_Name'):
 COLUMN_VALUE = read_column_from_db()
 
 @title_combination_router.get("/")
-async def get_all_data(name: str = Query(..., description="The name to search for")):
+async def get_all_combinated_data(name: str = Query(..., description="The name to search for")):
     try:
+        name=name.upper()
         def load_word_list(words_list):
             return set(words_list)
 
@@ -94,16 +80,35 @@ async def get_all_data(name: str = Query(..., description="The name to search fo
         name_validation = test_word_combination_checker()
 
         if name_validation:
-            return {"Message":f"{name} is combination of titles !"}
+            return CommonResponse(
+                status="success",
+                input_title=name,
+                isValid=False,
+                invalid_words=[],
+                Message=f"{name} is combination of titles !",
+            )
         else:
-            return {"Message":f"{name} is not a combination of titles !"}
+            return CommonResponse(
+                status="success",
+                input_title=name,
+                isValid=True,
+                invalid_words=[],
+                Message=f"{name} is not a combination of titles !"
+            )
     except Exception as e:
-        return {"error": str(e)}, 500
+        return CommonResponse(
+                status="failed",
+                input_title=name,
+                isValid=False,
+                invalid_words=[],
+                Error=f"Internal Server Error {e}"
+            ),500
 
 
 @title_combination_router.get("/space_nospace")
-async def get_all_data(name: str = Query(..., description="The name to search for")):
+async def get_space_nospace_data(name: str = Query(..., description="The name to search for")):
     try:
+        name=name.upper()
         def remove_spaces_variants(s):
             variants = set()
             for i in range(len(s) + 1):
@@ -123,9 +128,27 @@ async def get_all_data(name: str = Query(..., description="The name to search fo
         allowed = is_not_in_list(name, string_list=COLUMN_VALUE)
 
         if allowed:
-            return {"Message":f"{name} is allowed !"}
+            return CommonResponse(
+                status="success",
+                input_title=name,
+                isValid=True,
+                invalid_words=[],
+                Message=f"{name} is allowed !",
+            ),200
         else:
-            return {"Message":f"{name} is not allowed !"}
+            return CommonResponse(
+                status="success",
+                input_title=name,
+                isValid=False,
+                invalid_words=[],
+                Message=f"{name} is not allowed !",
+            ),200
 
     except Exception as e:
-        return {"error": str(e)}, 500
+        return CommonResponse(
+                status="failed",
+                input_title=name,
+                isValid=False,
+                invalid_words=[],
+                Error=f"Internal Server Error {e}"
+            ),500

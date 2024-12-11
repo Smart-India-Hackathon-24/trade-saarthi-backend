@@ -10,7 +10,7 @@ from metaphone import doublemetaphone
 from models.TradeMarkModel import TrademarkData
 from config.database import get_collection
 
-trademark_router = APIRouter(prefix="/trademark", tags=["trademark"])
+trademark_router = APIRouter(prefix="/title", tags=["trademark"])
 model = SentenceTransformer("all-MiniLM-L6-v2")
 collection_name="Alphabetic_sort"
 
@@ -121,7 +121,7 @@ async def get_id_by_title(title_name:str):
         if not title_name:
             return {"error": "No Name provided"}, 400
         collection = get_collection(collection_name)
-        expr = f'Title_Name == "{title_name}"'
+        expr = f'Title_Name == "{title_name.upper()}"'
         results=collection.query(
             expr=expr,
             output_fields=["Auto_id"],
