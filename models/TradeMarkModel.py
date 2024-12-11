@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List,Optional
 
 class TrademarkData(BaseModel):
     vector_of_metaphone:List[float]
@@ -12,7 +12,7 @@ class TrademarkData(BaseModel):
     metaphone_name_without_sorting: str 
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "vector_of_metaphone": [0.1, 0.2, 0.3],
                 "vector_of_name": [0.4, 0.5, 0.6],
@@ -24,3 +24,13 @@ class TrademarkData(BaseModel):
                 "metaphone_name_without_sorting": "ExmplTrdmrk",
             }
         }
+
+
+
+class CommonResponse(BaseModel):
+    status: str
+    input_title: Optional[str] = None
+    isValid: Optional[bool] = None
+    invalid_words: Optional[List[str]] = None
+    Message: Optional[str] = None
+    Error:Optional[str]=None

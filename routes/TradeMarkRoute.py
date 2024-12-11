@@ -121,7 +121,7 @@ async def get_id_by_title(title_name:str):
         if not title_name:
             return {"error": "No Name provided"}, 400
         collection = get_collection(collection_name)
-        expr = f'Title_Name == "{title_name}"'
+        expr = f'Title_Name == "{title_name.upper()}"'
         results=collection.query(
             expr=expr,
             output_fields=["Auto_id"],
