@@ -35,9 +35,9 @@ def read_column_from_db(column_name='Title_Name'):
 COLUMN_VALUE = read_column_from_db()
 
 @title_combination_router.get("/")
-async def get_all_combinated_data(name: str = Query(..., description="The name to search for")):
+async def get_all_combinated_data(title: str = Query(..., description="The name to search for")):
     try:
-        name=name.upper()
+        name=title.upper()
         def load_word_list(words_list):
             return set(words_list)
 
@@ -106,9 +106,9 @@ async def get_all_combinated_data(name: str = Query(..., description="The name t
 
 
 @title_combination_router.get("/space_nospace")
-async def get_space_nospace_data(name: str = Query(..., description="The name to search for")):
+async def get_space_nospace_data(title: str = Query(..., description="The name to search for")):
     try:
-        name=name.upper()
+        name=title.upper()
         def remove_spaces_variants(s):
             variants = set()
             for i in range(len(s) + 1):
