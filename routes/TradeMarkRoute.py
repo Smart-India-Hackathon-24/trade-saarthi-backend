@@ -12,7 +12,7 @@ from config.database import get_collection
 
 trademark_router = APIRouter(prefix="/title", tags=["trademark"])
 model = SentenceTransformer("all-MiniLM-L6-v2")
-collection_name="Alphabetic_sort"
+collection_name="Alphabetic_sort_2"
 
 
 def get_metaphone(name):
@@ -65,7 +65,7 @@ async def get_data_title(name: str = Query(..., description="The name to search 
             anns_field="vector_of_metaphone",
             param={"metric_type": "COSINE", "params": {"nprobe": 384}},
             limit=200,
-            output_fields=["Title_Name", "Metaphone_Name"],
+            output_fields=["Title_Name", ],
         )
 
         results = []
@@ -81,7 +81,7 @@ async def get_data_title(name: str = Query(..., description="The name to search 
             {
                 # "Title_Code": r["entity"]["Title_Code"],
                 "Title_Name": r["entity"]["Title_Name"],
-                "Metaphone_Name": r["entity"]["Metaphone_Name"],
+                # "Metaphone_Name": r["entity"]["Metaphone_Name"],
                 "distance": r["distance"],
             }
             for r in results

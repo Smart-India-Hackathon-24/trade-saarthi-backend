@@ -11,7 +11,7 @@ def read_column_from_db(column_name='Title_Name'):
     column_values = []
 
     try:
-        collection=get_collection("Alphabetic_sort")
+        collection=get_collection("Alphabetic_sort_2")
 
         iterator = collection.query_iterator(
         expr="",output_fields=["Title_Name"])
@@ -70,7 +70,6 @@ async def get_all_combinated_data(title: str = Query(..., description="The name 
         def test_word_combination_checker():
             title_names = COLUMN_VALUE
             word_set = load_word_list(title_names)
-            
             
 
             name_validation = is_word_combination(name, word_set)
