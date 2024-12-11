@@ -10,7 +10,7 @@ from metaphone import doublemetaphone
 from models.TradeMarkModel import TrademarkData
 from config.database import get_collection
 
-trademark_router = APIRouter(prefix="/trademark", tags=["trademark"])
+trademark_router = APIRouter(prefix="/title", tags=["trademark"])
 model = SentenceTransformer("all-MiniLM-L6-v2")
 collection_name="Alphabetic_sort"
 

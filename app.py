@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Request
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import uvicorn
@@ -88,6 +88,26 @@ async def get_cache_status():
     except Exception as e:
         return {"status": "error", "message": f"Error fetching cache data: {str(e)}"}
 
+
+@app.post("/unified_endpoint")
+async def unified_endpoint(title_name:str):
+    try:
+        # api_name = payload.get("api_name")
+        # data = payload.get("data", {})
+        
+        # if not api_name or api_name not in api_map:
+        #     raise HTTPException(status_code=400, detail="Invalid or missing API name.")
+        api_map={
+            ""
+        }
+        # # Call the corresponding API function
+        # result = api_map[api_name](data)
+        print(title_name)
+        result=""
+        return {"status": "success", "result": result}
+    
+    except Exception as e:
+        return {"status":"failed","message":f"Internal Server Error {e}"},500
 
 # All Validate Title Routes
 app.include_router(restricted_words_router)
