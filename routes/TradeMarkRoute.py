@@ -49,7 +49,7 @@ async def get_all_data(
         data = collection.query(expr="", limit=limit, output_fields=output_fields, output_fields_exclude=["Auto_id"])
         return {"message": "data received successfully", "data": data}
     except Exception as e:
-        return {"error": str(e)}, 500
+        return {"error": str(e)}
 
 
 @trademark_router.get("/getdataontitle")
@@ -93,14 +93,14 @@ async def get_data_title(name: str = Query(..., description="The name to search 
 
 
     except Exception as e:
-        return {"error": str(e)}, 500
+        return {"error": str(e)}
 
 
 @trademark_router.post("/add")
 async def insert_data(data: List[TrademarkData]):
     try:
         if not data:
-            return {"error": "No data provided"}, 400
+            return {"error": "No data provided"}
 
         collection = get_collection(collection_name)
         # for item in data:
@@ -111,7 +111,7 @@ async def insert_data(data: List[TrademarkData]):
 
         return {"message": "Data inserted successfully"}
     except Exception as e:
-        return {"error": str(e)}, 500
+        return {"error": str(e)}
 
 
 
@@ -119,7 +119,7 @@ async def insert_data(data: List[TrademarkData]):
 async def get_id_by_title(title_name:str):
     try:
         if not title_name:
-            return {"error": "No Name provided"}, 400
+            return {"error": "No Name provided"}
         collection = get_collection(collection_name)
         expr = f'Title_Name == "{title_name.upper()}"'
         results=collection.query(
@@ -128,9 +128,9 @@ async def get_id_by_title(title_name:str):
         )
         # Extract and return the primary IDs
         primary_ids = [result["Auto_id"] for result in results]
-        return {"message":"Fetch IDs by Title Name","results":primary_ids},200
+        return {"message":"Fetch IDs by Title Name","results":primary_ids}
     except Exception as e:
-        return {"error":str(e)},500
+        return {"error":str(e)}
     
 
 @trademark_router.delete("/deletebyid")
@@ -147,8 +147,8 @@ async def delete_title_by_id(auto_id:str):
         )
         # Delete the record
         collection.delete(expr)
-        return {"message":f"Delete the Title of given ID: {auto_id}","results":results},200
+        return {"message":f"Delete the Title of given ID: {auto_id}","results":results}
 
     
     except Exception as e:
-        return {"error":str(e)},500
+        return {"error":str(e)}

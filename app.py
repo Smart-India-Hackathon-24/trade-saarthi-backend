@@ -8,6 +8,9 @@ from config.database import connect_db
 from config.RedisConfig import get_redis_client
 from routes.RedisRoutes import redis_router
 import re
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_groq import ChatGroq
+from langchain_core.output_parsers import StrOutputParser
 
 # Connect to Zilliz Cloud
 connections.connect(
@@ -61,7 +64,7 @@ async def unified_endpoint(title:str):
         results={}
         for name,func in api_map.items():
             results[name]=await func(title)
-        print(results)
+        # print(results)
 
         def extract_is_valid(response):
             if isinstance(response, CommonResponse):
@@ -91,10 +94,10 @@ async def unified_endpoint(title:str):
         # Combine the lines into a single output string
         output_string = "\n".join(output_lines)
 
-        return {"status": "success","results":results,"final_output":d},200
+        return {"status": "success","results":results,"final_output":d}
     
     except Exception as e:
-        return {"status":"failed","message":f"Internal Server Error {e}"},500
+        return {"status":"failed","message":f"Internal Server Error {e}"}
 
 
 @app.post("/check_min_word")
@@ -106,24 +109,24 @@ async def check_minimum_word(title:str):
                 input_title=title,
                 isValid=False,
                 invalid_words=[],
-                Message="Title is required"
-            ),400
+                message="Title is required"
+            )
 
         return CommonResponse(
                 status="success",
                 input_title=title,
                 isValid=len(title.split())>1,
                 invalid_words=[],
-                Message=f"{title} has {len(title.split())} words"
-            ),200
+                message=f"{title} has {len(title.split())} words"
+            )
     except Exception as e:
         return CommonResponse(
                 status="failed",
                 input_title=title,
                 isValid=False,
                 invalid_words=[],
-                Error=f"Internal Server Error {e}"
-            ),500
+                error=f"Internal Server Error {e}"
+            )
 
 
 def contains_special_characters(string: str) -> bool:
@@ -142,8 +145,8 @@ async def check_special_character(title:str):
                 input_title=title,
                 isValid=False,
                 invalid_words=[],
-                Message="Title is required"
-            ),400
+                message="Title is required"
+            )
         print(re.search(pattern,title))
         if bool(re.search(pattern,title)):
             return CommonResponse(
@@ -151,15 +154,15 @@ async def check_special_character(title:str):
                 input_title=title,
                 isValid=False,
                 invalid_words=[],
-                Message=f"{title} has special characters which are not allowed "
-            ),200
+                message=f"{title} has special characters which are not allowed "
+            )
         return CommonResponse(
                 status="success",
                 input_title=title,
                 isValid=True,
                 invalid_words=[],
-                Message=f"{title} is allowed "
-            ),200
+                message=f"{title} is allowed "
+            )
     
     except Exception as e:
         return CommonResponse(
@@ -167,8 +170,8 @@ async def check_special_character(title:str):
                     input_title=title,
                     isValid=False,
                     invalid_words=[],
-                    Error=f"Internal Server Error {e}"
-                ),500
+                    error=f"Internal Server Error {e}"
+                )
 
 # All Validate Title Routes
 app.include_router(restricted_words_router)

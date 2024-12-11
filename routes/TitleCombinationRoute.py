@@ -85,7 +85,7 @@ async def get_all_combinated_data(title: str = Query(..., description="The name 
                 input_title=name,
                 isValid=False,
                 invalid_words=[],
-                Message=f"{name} is combination of titles !",
+                message=f"{name} is combination of titles !",
             )
         else:
             return CommonResponse(
@@ -93,7 +93,7 @@ async def get_all_combinated_data(title: str = Query(..., description="The name 
                 input_title=name,
                 isValid=True,
                 invalid_words=[],
-                Message=f"{name} is not a combination of titles !"
+                message=f"{name} is not a combination of titles !"
             )
     except Exception as e:
         return CommonResponse(
@@ -101,8 +101,8 @@ async def get_all_combinated_data(title: str = Query(..., description="The name 
                 input_title=name,
                 isValid=False,
                 invalid_words=[],
-                Error=f"Internal Server Error {e}"
-            ),500
+                error=f"Internal Server Error {e}"
+            )
 
 
 @title_combination_router.get("/space_nospace")
@@ -133,16 +133,16 @@ async def get_space_nospace_data(title: str = Query(..., description="The name t
                 input_title=name,
                 isValid=True,
                 invalid_words=[],
-                Message=f"{name} is allowed !",
-            ),200
+                message=f"{name} is allowed !",
+            )
         else:
             return CommonResponse(
                 status="success",
                 input_title=name,
                 isValid=False,
                 invalid_words=[],
-                Message=f"{name} is not allowed !",
-            ),200
+                message=f"{name} is not allowed !",
+            )
 
     except Exception as e:
         return CommonResponse(
@@ -150,5 +150,5 @@ async def get_space_nospace_data(title: str = Query(..., description="The name t
                 input_title=name,
                 isValid=False,
                 invalid_words=[],
-                Error=f"Internal Server Error {e}"
-            ),500
+                error=f"Internal Server Error {e}"
+            )
