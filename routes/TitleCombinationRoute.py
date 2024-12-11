@@ -11,7 +11,7 @@ def read_column_from_db(column_name='Title_Name'):
     column_values = []
 
     try:
-        collection=get_collection("Alphabetic_sort")
+        collection=get_collection("Alphabetic_sort_2")
 
         iterator = collection.query_iterator(
         expr="",output_fields=["Title_Name"])
@@ -35,9 +35,9 @@ def read_column_from_db(column_name='Title_Name'):
 COLUMN_VALUE = read_column_from_db()
 
 @title_combination_router.get("/")
-async def get_all_combinated_data(name: str = Query(..., description="The name to search for")):
+async def get_all_combinated_data(title: str = Query(..., description="The name to search for")):
     try:
-        name=name.upper()
+        name=title.upper()
         def load_word_list(words_list):
             return set(words_list)
 
@@ -71,7 +71,6 @@ async def get_all_combinated_data(name: str = Query(..., description="The name t
             title_names = COLUMN_VALUE
             word_set = load_word_list(title_names)
             
-            
 
             name_validation = is_word_combination(name, word_set)
 
@@ -85,7 +84,7 @@ async def get_all_combinated_data(name: str = Query(..., description="The name t
                 input_title=name,
                 isValid=False,
                 invalid_words=[],
-                Message=f"{name} is combination of titles !",
+                message=f"{name} is combination of titles !",
             )
         else:
             return CommonResponse(
@@ -93,7 +92,7 @@ async def get_all_combinated_data(name: str = Query(..., description="The name t
                 input_title=name,
                 isValid=True,
                 invalid_words=[],
-                Message=f"{name} is not a combination of titles !"
+                message=f"{name} is not a combination of titles !"
             )
     except Exception as e:
         return CommonResponse(
@@ -101,14 +100,14 @@ async def get_all_combinated_data(name: str = Query(..., description="The name t
                 input_title=name,
                 isValid=False,
                 invalid_words=[],
-                Error=f"Internal Server Error {e}"
-            ),500
+                error=f"Internal Server Error {e}"
+            )
 
 
 @title_combination_router.get("/space_nospace")
-async def get_space_nospace_data(name: str = Query(..., description="The name to search for")):
+async def get_space_nospace_data(title: str = Query(..., description="The name to search for")):
     try:
-        name=name.upper()
+        name=title.upper()
         def remove_spaces_variants(s):
             variants = set()
             for i in range(len(s) + 1):
@@ -133,16 +132,16 @@ async def get_space_nospace_data(name: str = Query(..., description="The name to
                 input_title=name,
                 isValid=True,
                 invalid_words=[],
-                Message=f"{name} is allowed !",
-            ),200
+                message=f"{name} is allowed !",
+            )
         else:
             return CommonResponse(
                 status="success",
                 input_title=name,
                 isValid=False,
                 invalid_words=[],
-                Message=f"{name} is not allowed !",
-            ),200
+                message=f"{name} is not allowed !",
+            )
 
     except Exception as e:
         return CommonResponse(
@@ -150,5 +149,5 @@ async def get_space_nospace_data(name: str = Query(..., description="The name to
                 input_title=name,
                 isValid=False,
                 invalid_words=[],
-                Error=f"Internal Server Error {e}"
-            ),500
+                error=f"Internal Server Error {e}"
+            )

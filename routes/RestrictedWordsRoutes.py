@@ -3,7 +3,7 @@ from functions.RestrictedListsFunctions import *
 from functions.AddCacheToRedis import set_cache, get_cache
 from functions.CsvOperations import CsvOperations
 from utils.path_utils import get_data_file_path
-
+from models.TradeMarkModel import CommonResponse
 restricted_words_router = APIRouter(
     prefix="/restricted_words", tags=["Restricted Words"]
 )
@@ -54,14 +54,21 @@ async def check_restricted_words(
         title_words = title.lower().split()
         invalid_words = [word for word in title_words if word in words]
         
-        response = {
-            "status": "success",
-            "input_title": title,
-            "isValid": len(invalid_words) == 0,
-            "invalid_words": invalid_words,
-        }
-        
+        response = CommonResponse(
+                status="success",
+                input_title=title,
+                isValid=len(invalid_words) == 0,
+                invalid_words=invalid_words,
+                message="Check The Restricted Words like Police, Crime"
+            )
         set_cache(cache_key, response, expiry_seconds=3600)  # Cache for 1 hour
         return response
     except Exception as e:
-        return {"status": "error", "message": str(e)}
+        # return {"status": "error", "message": str(e)}
+        return CommonResponse(
+                status="failed",
+                input_title=title,
+                isValid=False,
+                invalid_words=[],
+                error=f"Internal Server Error {e}"
+            )
