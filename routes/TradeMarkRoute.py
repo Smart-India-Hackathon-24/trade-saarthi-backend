@@ -12,6 +12,8 @@ from config.database import get_collection
 
 trademark_router = APIRouter(prefix="/trademark", tags=["trademark"])
 model = SentenceTransformer("all-MiniLM-L6-v2")
+collection_name="Alphabetic_sort"
+
 
 def get_metaphone(name):
     return doublemetaphone(name)[0]
@@ -27,7 +29,7 @@ async def get_all_data(
     show_nysiis: bool = Query(False, description="Show NYSIIS Name")
 ):
     try:
-        collection = get_collection("Alphabetic_sort")
+        collection = get_collection(collection_name)
         
         # Title_Name and Title_Code are always included
         output_fields = ["Title_Name", "Title_Code"]
@@ -53,7 +55,7 @@ async def get_all_data(
 @trademark_router.get("/getdataontitle")
 async def get_data_title(name: str = Query(..., description="The name to search for")):
     try:
-        collection = get_collection('Alphabetic_sort')
+        collection = get_collection(collection_name)
         print(name)
         print(get_metaphone(name))
         query_vector = model.encode(get_metaphone(name)).tolist()
@@ -100,12 +102,12 @@ async def insert_data(data: List[TrademarkData]):
         if not data:
             return {"error": "No data provided"}, 400
 
-        collection = get_collection('Alphabetic_sort')
-        for item in data:
-            vector = [random.random() for _ in range(128)]
-            item_dict = item.dict()
-            item_dict["vector"] = vector
-            collection.insert(item_dict)
+        collection = get_collection(collection_name)
+        # for item in data:
+        #     vector = [random.random() for _ in range(128)]
+        #     item_dict = item.dict()
+        #     item_dict["vector"] = vector
+        #     collection.insert(item_dict)
 
         return {"message": "Data inserted successfully"}
     except Exception as e:
@@ -113,13 +115,40 @@ async def insert_data(data: List[TrademarkData]):
 
 
 
-@trademark_router.get("/getid")
-async def get_id(id:str):
+@trademark_router.get("/getidbytitle")
+async def get_id_by_title(title_name:str):
     try:
-        if not id:
-            return {"error": "No ID provided"}, 400
-        collection = get_collection('Alphabetic_sort')
+        if not title_name:
+            return {"error": "No Name provided"}, 400
+        collection = get_collection(collection_name)
+        expr = f'Title_Name == "{title_name}"'
+        results=collection.query(
+            expr=expr,
+            output_fields=["Auto_id"],
+        )
+        # Extract and return the primary IDs
+        primary_ids = [result["Auto_id"] for result in results]
+        return {"message":"Fetch IDs by Title Name","results":primary_ids},200
+    except Exception as e:
+        return {"error":str(e)},500
+    
 
-        return {"message":"Fetched Title By ID"},200
+@trademark_router.delete("/deletebyid")
+async def delete_title_by_id(auto_id:str):
+    try:
+        if not auto_id:
+            return {"message":"Please provide the Auto Id"},400
+
+        collection=get_collection(collection_name)
+        expr = f"Auto_id == {auto_id}"
+        results = collection.query(
+            expr=expr,
+            output_fields=["Title_Name"]
+        )
+        # Delete the record
+        collection.delete(expr)
+        return {"message":f"Delete the Title of given ID: {auto_id}","results":results},200
+
+    
     except Exception as e:
         return {"error":str(e)},500
