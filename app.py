@@ -19,7 +19,7 @@ connections.connect(
 connect_db()
 
 from routes.RestrictedWordsRoutes import restricted_words_router
-from routes.RestrictedPrefixSuffixRoutes import restricted_prefix_suffix_router
+from routes.RestrictedPrefixSuffixRoutes import prefix_router, suffix_router, check_router
 from routes.TitleCombinationRoute import title_combination_router
 from routes.TradeMarkRoute import trademark_router
 
@@ -48,7 +48,9 @@ async def root():
 
 # All Validate Title Routes
 app.include_router(restricted_words_router)
-app.include_router(restricted_prefix_suffix_router)
+app.include_router(prefix_router)
+app.include_router(suffix_router)
+app.include_router(check_router)
 app.include_router(title_combination_router)
 app.include_router(trademark_router)
 app.include_router(redis_router)
