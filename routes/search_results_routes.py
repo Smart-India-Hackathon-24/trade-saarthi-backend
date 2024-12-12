@@ -72,7 +72,7 @@ async def perform_hybrid_search(collection,reqs,output_fields,name=0.8,meta=0.2)
 
 async def hybrid_vector_search_for_count(name,title,meta):
     try:
-        collection=get_collection("Alphabetic_sort_2")
+        collection=get_collection("Alphabetic_sort_3")
         nameVector=[model.encode(name).tolist()]
         metaphoneVector=[model.encode(get_metaphone(name)).tolist()]
         search_param_1 = {
@@ -243,7 +243,7 @@ async def same_title(title: str = Query(..., description="The name to search for
                 "status":"success",
                 "message": f"Titles as same as {name}",
                 "FDL":json.loads(resultFDL.to_json()),
-                "FLD":json.loads(resultFLD.to_json()),
+                # "FLD":json.loads(resultFLD.to_json()),
                 "isValid":True,
                 "rejectance probability" : average_fuzzy,
                 "acceptance probability" : 100-average_fuzzy,
@@ -292,7 +292,7 @@ async def similar_title(title: str = Query(..., description="The name to search 
         return {
                 "status":"success",
                 "message": f"Titles as same as {name}",
-                "DFL":json.loads(resultDFL.to_json()),
+                # "DFL":json.loads(resultDFL.to_json()),
                 "FDL":json.loads(resultFDL.to_json()),
                 "probability":probability,
                 "isValid":True,
@@ -323,6 +323,7 @@ async def similar_sound(title: str = Query(..., description="The name to search 
             (result['distance'] >= (0.65)) &
             (result['fuzzy'] >= 50)
         ]
+        print(result)
         resultDFL = result.sort_values(
             by=['distance','fuzzy','Meta_Levensthein'], 
             ascending=[False,False,False])
@@ -330,20 +331,22 @@ async def similar_sound(title: str = Query(..., description="The name to search 
             by=['fuzzy','distance','Meta_Levensthein'], 
             ascending=[False,False,False])
         print(resultDFL)
-        average_fuzzy=0
-        if resultDFL.empty or resultDFL['fuzzy'].dropna().empty:
-            average_fuzzy = 0  
-        else:
-            average_fuzzy = resultDFL['fuzzy'].mean()
+        # average_distance=0
+        # if resultDFL.empty or resultDFL['distance'].dropna().empty:
+        #     average_distance = 0  
+        # else:
+        #     average_distance = resultDFL['distance'].mean()
+        distance_values= resultDFL["distance"].tolist()
+        probability=calculate_dynamic_impacts(distance_values,name)
         # resultFDL = resultFDL.reset_index(drop=True)
         return {
-                "status":"success"
+                "status":"success",
                 "message": f"Titles as same as {name}",
                 "isValid":True,
                 "DFL":json.loads(resultDFL.to_json()),
-                "FLD":json.loads(resultFLD.to_json()),
-                "rejectance probability" : average_fuzzy,
-                "acceptance probability" : 100-average_fuzzy,
+                # "FLD":json.loads(resultFLD.to_json()),
+                "rejectance probability" : probability,
+                "acceptance probability" : 100-probability,
             }
     except Exception as e:
             return {"status":"failed","error": str(e),"isValid":False}
