@@ -72,7 +72,7 @@ async def perform_hybrid_search(collection,reqs,output_fields,name=0.8,meta=0.2)
 
 async def hybrid_vector_search_for_count(name,title,meta):
     try:
-        collection=get_collection("Alphabetic_sort_2")
+        collection=get_collection("Alphabetic_sort_3")
         nameVector=[model.encode(name).tolist()]
         metaphoneVector=[model.encode(get_metaphone(name)).tolist()]
         search_param_1 = {

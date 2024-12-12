@@ -11,7 +11,7 @@ def read_column_from_db(column_name='Title_Name'):
     column_values = []
 
     try:
-        collection=get_collection("Alphabetic_sort_2")
+        collection=get_collection("Alphabetic_sort_3")
 
         iterator = collection.query_iterator(
         expr="",output_fields=["Title_Name"])
