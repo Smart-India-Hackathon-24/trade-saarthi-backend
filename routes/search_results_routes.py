@@ -296,8 +296,8 @@ async def similar_title(title: str = Query(..., description="The name to search 
                 "FDL":json.loads(resultFDL.to_json()),
                 "probability":probability,
                 "isValid":True,
-                "rejectance probability" : probability,
-                "acceptance probability" : 100-probability,
+                "rejectance probability" : 100-probability,
+                "acceptance probability" : probability,
             }
     except Exception as e:
         return {"status":"failed","error": str(e),"isValid":False}    
