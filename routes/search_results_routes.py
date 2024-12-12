@@ -296,8 +296,8 @@ async def similar_title(title: str = Query(..., description="The name to search 
                 "FDL":json.loads(resultFDL.to_json()),
                 "probability":probability,
                 "isValid":True,
-                "rejectance probability" : probability,
-                "acceptance probability" : 100-probability,
+                "rejectance probability" : 100-probability,
+                "acceptance probability" : probability,
             }
     except Exception as e:
         return {"status":"failed","error": str(e),"isValid":False}    
@@ -337,12 +337,12 @@ async def similar_sound(title: str = Query(..., description="The name to search 
             average_fuzzy = resultDFL['fuzzy'].mean()
         # resultFDL = resultFDL.reset_index(drop=True)
         return {
-                "status":"success"
+                "status":"success",
                 "message": f"Titles as same as {name}",
                 "isValid":True,
                 "DFL":json.loads(resultDFL.to_json()),
                 "FLD":json.loads(resultFLD.to_json()),
-                "rejectance probability" : average_fuzzy,
+                "rejectance probability": average_fuzzy,
                 "acceptance probability" : 100-average_fuzzy,
             }
     except Exception as e:
