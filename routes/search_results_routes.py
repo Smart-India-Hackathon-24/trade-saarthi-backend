@@ -281,6 +281,7 @@ async def similar_title(title: str = Query(..., description="The name to search 
             ascending=[False,False,False])
         column_order = ['fuzzy', 'distance', 'Meta_Levensthein', 'Metaphone_Name_After_Sort', 'Title_Name', 'Title_Name_After_Sort']
         resultFDL = resultFDL[column_order]
+        resultFDL = resultFDL.reset_index(drop=True)
         print(resultFDL)
         print("--")
         print(resultFDL["fuzzy"],type(resultFDL["fuzzy"]))
