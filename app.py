@@ -26,6 +26,7 @@ from routes.RestrictedPrefixSuffixRoutes import prefix_router, suffix_router, ch
 from routes.TitleCombinationRoute import title_combination_router,get_all_combinated_data,get_space_nospace_data
 from routes.TradeMarkRoute import trademark_router
 from models.TradeMarkModel import CommonResponse
+from routes import search_results_routes
 
 
 app = FastAPI(
@@ -282,6 +283,7 @@ app.include_router(check_router)
 app.include_router(title_combination_router)
 app.include_router(trademark_router)
 app.include_router(redis_router)
+app.include_router(search_results_routes.router)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
