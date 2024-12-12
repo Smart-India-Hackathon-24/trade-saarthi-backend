@@ -195,10 +195,10 @@ async def report(title:str):
         responce =chatbot("",*keys_value[:6])
         # print(responce)
 
-        return {"status": "success","final_output":responce},200
+        return {"status": "success","final_output":responce}
 
     except Exception as e:
-        return {"status":"failed","message":f"Internal Server Error {e}"},500
+        return {"status":"failed","message":f"Internal Server Error {e}"}
 
 
 @app.post("/check_min_word")
