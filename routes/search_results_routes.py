@@ -137,10 +137,10 @@ def calculate_dynamic_impacts(fuzzy_scores, title):
     total_count = len(fuzzy_scores)
 
     # Categorize scores into 5 levels
-    highest_scores = [score for score in fuzzy_scores if 96 <= score <= 100]
-    higher_scores = [score for score in fuzzy_scores if 91 <= score <= 95]
-    high_scores = [score for score in fuzzy_scores if 80 <= score <= 90]
-    medium_scores = [score for score in fuzzy_scores if 60 <= score <= 79]
+    highest_scores = [score for score in fuzzy_scores if 90 <= score <= 100]
+    higher_scores = [score for score in fuzzy_scores if 80 <= score <= 90]
+    high_scores = [score for score in fuzzy_scores if 70 <= score <= 80]
+    medium_scores = [score for score in fuzzy_scores if 60 <= score <= 70]
     low_scores = [score for score in fuzzy_scores if 50 <= score <= 59]
 
     n_highest = len(highest_scores)
@@ -304,7 +304,7 @@ async def similar_title(title: str = Query(..., description="The name to search 
         result["Meta_Levensthein"] = meta_dist
         lmax = result["Meta_Levensthein"].max()
         result["Meta_Levensthein"] = lmax - result["Meta_Levensthein"]
-        result = result.loc[(result["distance"] >= (0.6)) & (result["fuzzy"] >= 40)]
+        result = result.loc[(result["distance"] >= (0.6)) & (result["fuzzy"] >= 50)]
         resultDFL = result.sort_values(
             by=["distance", "fuzzy", "Meta_Levensthein"],
             ascending=[False, False, False],
@@ -367,7 +367,7 @@ async def similar_sound(title: str = Query(..., description="The name to search 
         result["Meta_Levensthein"] = meta_dist
         lmax = result["Meta_Levensthein"].max()
         result["Meta_Levensthein"] = lmax - result["Meta_Levensthein"]
-        result = result.loc[(result["distance"] >= (0.65)) & (result["fuzzy"] >= 50)]
+        result = result.loc[(result["distance"] >= (0.65)) & (result["fuzzy"] >= 60)]
         print(result)
         resultDFL = result.sort_values(
             by=["distance", "fuzzy", "Meta_Levensthein"],
