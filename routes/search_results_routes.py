@@ -13,9 +13,10 @@ from config.database import get_collection
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import nltk
+# nltk.download('stopwords')
+# nltk.download('punkt_tab')
 
-
-router = APIRouter(prefix="/searchresults", tags=["trademark"])
+similiar_router = APIRouter(prefix="/searchresults", tags=["trademark"])
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 def get_metaphone(name):
@@ -71,7 +72,7 @@ async def perform_hybrid_search(collection,reqs,output_fields,name=0.8,meta=0.2)
 
 async def hybrid_vector_search_for_count(name,title,meta):
     try:
-        collection=get_collection("Alphabetic_sort")
+        collection=get_collection("Alphabetic_sort_2")
         nameVector=[model.encode(name).tolist()]
         metaphoneVector=[model.encode(get_metaphone(name)).tolist()]
         search_param_1 = {
@@ -113,8 +114,8 @@ async def hybrid_vector_search_for_count(name,title,meta):
         return {"error": str(e.with_traceback())}, 500
 
 
-@router.get("/sametitle")
-async def same_title(name: str = Query(..., description="The name to search for"),meta: float = Query(..., description="The name to search for")):
+@similiar_router.get("/sametitle")
+async def same_title(name: str = Query(..., description="The name to search for")):
     try:
         # LOKTANTRATIMES | LOKTANTRA TIMES | TIMES LOKTANTRA | TIMES OF LOKTANTRA | MAHARASHTRATIMES CITY
         # MAHARASHTRATIMESCITY -> Not working
@@ -142,18 +143,22 @@ async def same_title(name: str = Query(..., description="The name to search for"
         resultFLD = result.sort_values(
             by=['fuzzy','Meta_Levensthein','distance'], 
             ascending=[False,False,False])
+        average_fuzzy=0
+        if resultFDL.empty or resultFDL['fuzzy'].dropna().empty:
+            average_fuzzy = 0  
+        else:
+            average_fuzzy = resultFDL['fuzzy'].mean()
         return {
                 "message": f"Titles as same as {name}",
                 "FDL":json.loads(resultFDL.to_json()),
-                "FLD":json.loads(resultFLD.to_json())
+                "FLD":json.loads(resultFLD.to_json()),
+                "probability" : 100-average_fuzzy
             }
-        #     print(result)
-        #     print("---------")
-        # print("***************************************************************")
+
     except Exception as e:
         return {"error": str(e.with_traceback())}, 500
     
-@router.get("/similartitles")
+@similiar_router.get("/similartitles")
 async def similar_title(name: str = Query(..., description="The name to search for"),meta: float = Query(..., description="The name to search for")):
     try:
         words = word_tokenize(name)
@@ -188,7 +193,7 @@ async def similar_title(name: str = Query(..., description="The name to search f
     except Exception as e:
         return {"error": str(e.with_traceback())}, 500    
     
-@router.get("/similarsound")
+@similiar_router.get("/similarsound")
 async def similar_sound(name: str = Query(..., description="The name to search for"),meta: float = Query(..., description="The name to search for")):
     try:
         words = word_tokenize(name)
