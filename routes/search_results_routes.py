@@ -250,7 +250,7 @@ async def same_title(title: str = Query(..., description="The name to search for
             }
 
     except Exception as e:
-        return {"error": str(e)}, 500
+        return {"error": str(e),"isValid":False}
     
 @similiar_router.get("/similartitles")
 async def similar_title(title: str = Query(..., description="The name to search for")):
@@ -281,6 +281,7 @@ async def similar_title(title: str = Query(..., description="The name to search 
             ascending=[False,False,False])
         column_order = ['fuzzy', 'distance', 'Meta_Levensthein', 'Metaphone_Name_After_Sort', 'Title_Name', 'Title_Name_After_Sort']
         resultFDL = resultFDL[column_order]
+        resultFDL = resultFDL.reset_index(drop=True)
         print(resultFDL)
         print("--")
         print(resultFDL["fuzzy"],type(resultFDL["fuzzy"]))
@@ -289,17 +290,22 @@ async def similar_title(title: str = Query(..., description="The name to search 
         print(type(fuzzy_values))
         probability=calculate_dynamic_impacts(fuzzy_values,name)
         return {
+                "status":"success",
                 "message": f"Titles as same as {name}",
                 "DFL":json.loads(resultDFL.to_json()),
                 "FDL":json.loads(resultFDL.to_json()),
-                "probability":probability
+                "probability":probability,
+                "isValid":True,
+                "rejectance probability" : probability,
+                "acceptance probability" : 100-probability,
             }
     except Exception as e:
-        return {"error": str(e)}, 500    
+        return {"status":"failed","error": str(e),"isValid":False}    
     
 @similiar_router.get("/similarsound")
-async def similar_sound(name: str = Query(..., description="The name to search for"),meta: float = Query(..., description="The name to search for")):
+async def similar_sound(title: str = Query(..., description="The name to search for")):
     try:
+        name=title
         words = word_tokenize(name)
         filtered_words = [word for word in words if word.lower() not in stopwords.words('english')]
         sorted_sentence = sorted(filtered_words, key=str.lower)
@@ -324,10 +330,20 @@ async def similar_sound(name: str = Query(..., description="The name to search f
             by=['fuzzy','distance','Meta_Levensthein'], 
             ascending=[False,False,False])
         print(resultDFL)
+        average_fuzzy=0
+        if resultDFL.empty or resultDFL['fuzzy'].dropna().empty:
+            average_fuzzy = 0  
+        else:
+            average_fuzzy = resultDFL['fuzzy'].mean()
+        # resultFDL = resultFDL.reset_index(drop=True)
         return {
+                "status":"success"
                 "message": f"Titles as same as {name}",
-                "FDL":json.loads(resultDFL.to_json()),
-                "FLD":json.loads(resultFLD.to_json())
+                "isValid":True,
+                "DFL":json.loads(resultDFL.to_json()),
+                "FLD":json.loads(resultFLD.to_json()),
+                "rejectance probability" : average_fuzzy,
+                "acceptance probability" : 100-average_fuzzy,
             }
     except Exception as e:
-            return {"error": str(e.with_traceback())}, 500
+            return {"status":"failed","error": str(e),"isValid":False}
