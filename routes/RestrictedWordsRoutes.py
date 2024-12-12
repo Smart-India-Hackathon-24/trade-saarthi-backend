@@ -60,6 +60,7 @@ async def check_restricted_words(
             return cached_result
 
         words = CsvOperations.read_csv(WORDS_CSV_PATH)
+        print("words: ", words)
         title_words = title.lower().split()
 
         # Check for individual restricted words
@@ -68,13 +69,15 @@ async def check_restricted_words(
         # Check for combinations of restricted words without spaces
         title_no_spaces = title.lower().split()
         for i in range(len(words)):
-            for j in range(i + 1, len(words)):
+            for j in range(i, len(words)):
+                print(words[i], words[j])
                 combined = words[i] + words[j]
                 if combined in title_no_spaces:
                     invalid_words.extend([words[i], words[j]])
                 combined = words[j] + words[i]
                 if combined in title_no_spaces:
-                    invalid_words.extend([words[i], words[j]])
+                    invalid_words.extend([words[j], words[i]])
+                combined = words[i] + words[i]
 
         # Remove duplicates while preserving order
         invalid_words = list(dict.fromkeys(invalid_words))
@@ -89,7 +92,15 @@ async def check_restricted_words(
                 else f"{title} contains restricted words"
             ),
         )
-        set_cache(cache_key, response, expiry_seconds=3600)  # Cache for 1 hour
+        # Convert response to dict before caching
+        response_dict = {
+            "status": response.status,
+            "input_title": response.input_title,
+            "isValid": response.isValid,
+            "invalid_words": response.invalid_words,
+            "message": response.message
+        }
+        set_cache(cache_key, response_dict, expiry_seconds=3600)  # Cache for 1 hour
         return response
     except Exception as e:
         # return {"status": "error", "message": str(e)}
