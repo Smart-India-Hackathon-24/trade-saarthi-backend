@@ -5,8 +5,10 @@ from functions.CsvOperations import CsvOperations
 from utils.path_utils import get_data_file_path
 
 prefix_router = APIRouter(prefix="/restricted_prefix", tags=["Restricted Prefix"])
-suffix_router = APIRouter(prefix="/restricted_suffix", tags=["Restricted Suffix"]) 
-check_router = APIRouter(prefix="/restricted_check", tags=["Restricted Prefix Suffix Check"])
+suffix_router = APIRouter(prefix="/restricted_suffix", tags=["Restricted Suffix"])
+check_router = APIRouter(
+    prefix="/restricted_check", tags=["Restricted Prefix Suffix Check"]
+)
 
 PREFIX_CSV_PATH = get_data_file_path("RestrictedPrefix.csv")
 SUFFIX_CSV_PATH = get_data_file_path("RestrictedSuffix.csv")
@@ -101,12 +103,12 @@ async def check_restricted_prefix_suffix(
 
         # Check if title starts with any restricted prefix
         for prefix in prefixes:
-            if title.startswith(prefix):
+            if title.startswith(prefix + " "):
                 invalid_words.append(f"prefix:{prefix}")
 
         # Check if title ends with any restricted suffix
         for suffix in suffixes:
-            if title.endswith(suffix):
+            if title.endswith(" " + suffix):
                 invalid_words.append(f"suffix:{suffix}")
 
         response = {
