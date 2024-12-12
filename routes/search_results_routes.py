@@ -293,7 +293,9 @@ async def similar_title(title: str = Query(..., description="The name to search 
                 "message": f"Titles as same as {name}",
                 "DFL":json.loads(resultDFL.to_json()),
                 "FDL":json.loads(resultFDL.to_json()),
-                "probability":probability
+                "probability":probability,
+                "rejectance probability" : probability,
+                "acceptance probability" : 100-probability,
             }
     except Exception as e:
         return {"error": str(e)}, 500    
