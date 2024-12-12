@@ -392,8 +392,8 @@ async def similar_sound(title: str = Query(..., description="The name to search 
             "status": "success",
             "message": f"Titles as same as {name}",
             "isValid": True,
-            "DFL": json.loads(resultDFL.to_json()),
-            # "FLD":json.loads(resultFLD.to_json()),
+            # "DFL": json.loads(resultDFL.to_json()),
+            "FLD":json.loads(resultFLD.to_json()),
             "rejectance probability": 100 - probability,
             "acceptance probability": probability,
         }
