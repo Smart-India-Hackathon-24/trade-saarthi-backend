@@ -345,8 +345,8 @@ async def similar_sound(title: str = Query(..., description="The name to search 
                 "isValid":True,
                 "DFL":json.loads(resultDFL.to_json()),
                 # "FLD":json.loads(resultFLD.to_json()),
-                "rejectance probability" : probability,
-                "acceptance probability" : 100-probability,
+                "rejectance probability" : 100-probability,
+                "acceptance probability" : probability,
             }
     except Exception as e:
             return {"status":"failed","error": str(e),"isValid":False}
