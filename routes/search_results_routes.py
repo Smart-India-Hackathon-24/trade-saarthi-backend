@@ -170,7 +170,7 @@ def calculate_dynamic_impacts(fuzzy_scores, title):
     # Ensure probability stays within valid range
     remaining_prob = max(0, min(1, remaining_prob))
 
-    return remaining_prob
+    return remaining_prob*100
 
     # return {
     #     "title": title,

@@ -25,7 +25,7 @@ from routes.RestrictedWordsRoutes import restricted_words_router,check_restricte
 from routes.RestrictedPrefixSuffixRoutes import prefix_router, suffix_router, check_router,check_restricted_prefix_suffix
 from routes.TitleCombinationRoute import title_combination_router,get_all_combinated_data,get_space_nospace_data
 from routes.TradeMarkRoute import trademark_router
-from routes.search_results_routes import similiar_router
+from routes.search_results_routes import similiar_router,same_title,similar_title,similar_sound
 from models.TradeMarkModel import CommonResponse
 # from routes import search_results_routes
 
@@ -60,7 +60,10 @@ async def unified_endpoint(title:str):
             "Title Combination":get_all_combinated_data,
             "Space No_Space":get_space_nospace_data,
             "Check Minimum Title Length":check_minimum_word,
-            "Check Special Characters":check_special_character
+            "Check Special Characters":check_special_character,
+            "Same Title":same_title,
+            "Similar Title":similar_title,
+            "Similar Sounding Title":similar_sound
         }
         
         results={}
