@@ -1,0 +1,33 @@
+Title,Restricted Words Check,Restricted Prefix/Suffix Check,Title Combination Check,Space No Space Check,Minimum Title Length Check,Special Characters Check,Same Title Probability,Similar Title Probability,Similar Sounding Title Probability
+Title,API Result
+LUCKNOW JANHIT JAGRAN,True,True,False,False,True,True,100.0,39.08389830508475,0
+BHARAT VANI,True,True,True,True,True,True,0,19.448113207547166,0
+DESH SAMACHAR,True,True,True,True,True,True,0,14.97999999999999,0
+NAVBHARAT DARPAN,True,True,True,True,True,True,0,12.643801652892563,0
+JAN PRAKASH,True,True,True,True,True,True,0,11.648076923076928,0
+SWATANTRA PATRIKA,True,True,True,True,True,True,0,13.539682539682545,0
+SAMAJ VARTA,True,True,True,True,True,True,0,10.899300699300696,0
+RASHTRA DEEPAK,True,True,True,True,True,True,0,11.090909090909093,0
+DESH BHASKAR,True,True,True,True,True,True,0,15.202678571428578,0
+KRANTIKARI SANDESH,True,True,True,True,True,True,0,10.652631578947364,0
+BHARAT JYOTI,True,True,True,True,True,True,0,23.17920792079208,0
+MITTI KI AWAZ,True,True,True,True,True,True,0,19.718243243243236,0
+DESH UDAY,True,True,True,True,True,True,0,13.619780219780225,0
+LOK JAGRITI,True,True,True,True,True,True,0,10.966666666666669,0
+JAGRUK BHARAT,True,True,True,True,True,True,0,14.505102040816325,0
+JANMAT PATRIKA,True,True,True,True,True,True,0,11.864210526315787,0
+AAJ KA SAMACHAR,True,False,True,True,True,True,0,16.31782945736434,0
+HINDUSTAN EXPRESS,True,True,True,True,True,True,0,50.5051282051282,0
+DESH KI NAZAR,True,True,True,True,True,True,0,9.823636363636368,0
+PRABHAT PATRIKA,True,True,True,True,True,True,0,13.228282828282829,0
+BHARAT SANDESH,True,True,True,True,True,True,0,22.55315315315316,0
+SANSKRITI TIMES,True,False,True,True,True,True,97.0,29.7748717948718,0
+SAMRIDDH BHARAT,True,True,True,True,True,True,0,11.718518518518522,0
+LOK DARPAN,True,True,True,True,True,True,0,16.442647058823525,0
+VIKAS SAMVAD,True,True,True,True,True,True,0,12.552941176470583,0
+AAWAZ-E-HIND,True,False,True,True,False,True,0,29.193181818181827,0
+NAYA KHABAR,True,True,True,True,True,True,0,12.202469135802474,0
+DESH BHAKTI TIMES,True,False,True,True,True,True,97.0,62.30205128205129,0
+AAM AWAZ,True,False,False,False,True,True,100.0,40.9983606557377,0
+JAGRITI EXPRESS,True,True,True,True,True,True,0,12.008695652173913,0
+BHARAT PATHIK,True,True,True,True,True,True,0,22.117000000000004,0

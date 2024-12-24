@@ -1,0 +1,52 @@
+Title,Restricted Words Check,Restricted Prefix/Suffix Check,Title Combination Check,Space No Space Check,Minimum Title Length Check,Special Characters Check,Same Title Probability,Similar Title Probability,Similar Sounding Title Probability
+Title,API Result
+Global Dawn,True,True,True,True,True,True,0,7.2260869565217405,10.474509803921578
+The Civic Light,True,False,True,True,True,True,0,7.480000000000004,10.549999999999997
+Rising Nation Times,True,False,True,True,True,True,0,12.137234042553189,18.130468750000006
+Unity Post,True,True,True,True,True,True,0,3.8175000000000097,10.480000000000004
+People’s Digest,True,True,True,True,True,True,0,13.562068965517241,13.833333333333329
+Morning View,True,True,True,True,True,True,0,21.4157894736842,56.01666666666667
+National Gateway,True,True,True,True,True,True,0,9.01111111111112,14.283333333333331
+New Epoch Journal,True,True,True,True,True,True,0,3.039999999999992,10.541176470588226
+The Vanguard Mirror,True,False,True,True,True,True,0,7.92941176470589,16.799999999999997
+Spirit of Freedom,True,True,True,True,True,True,0,12.33999999999999,15.776923076923083
+Chronicle of Truth,True,True,True,True,True,True,0,21.429411764705875,28.633333333333326
+Bright Nation Express,True,True,True,True,True,True,0,15.590721649484536,25.146153846153837
+The Observer Bulletin,True,False,True,True,True,True,0,9.797435897435903,17.114285714285714
+Global Beacon,True,True,True,True,True,True,0,2.7249999999999943,10.799999999999997
+Civic Herald,True,True,True,True,True,True,0,1.596078431372547,10.399999999999991
+The Liberty Journal,True,False,True,True,True,True,0,6.459550561797741,19.248000000000005
+Dawn of Change,True,True,True,True,True,True,0,1.9612903225806377,16.978571428571428
+Dynamic Times,True,False,True,True,True,True,0,18.32797927461141,23.67297297297297
+The Epoch Horizon,True,False,True,True,True,True,0,6.320000000000007,100.0
+Progressive Mirror,True,True,True,True,True,True,0,10.929166666666674,14.840000000000003
+Freedom Times,True,False,False,False,True,True,100.0,20.86943005181348,26.042261904761915
+New Perspective Gazette,True,True,True,True,True,True,0,2.2550724637681157,15.299999999999997
+The People’s Courier,True,False,True,True,True,True,0,6.8799999999999955,21.39999999999999
+Forward Vision Daily,True,True,True,True,True,True,0,5.556363636363642,100.0
+Rising Echo,True,True,True,True,True,True,0,11.903703703703712,26.38181818181819
+Chronicle of Hope,True,True,True,True,True,True,0,13.214285714285708,31.837500000000006
+National Pulse,True,True,True,True,True,True,0,12.136065573770495,21.554838709677426
+The Inclusive Outlook,True,False,True,True,True,True,0,7.066666666666663,11.079999999999998
+Community Light,True,True,True,True,True,True,0,12.361538461538458,19.307142857142864
+Pathbreaker News,True,True,True,True,True,True,0,3.0415841584158443,10.576000000000008
+Rashtra Pravah,True,True,True,True,True,True,0,6.463157894736852,19.818749999999994
+Jan Prabhat,True,True,True,True,True,True,0,8.13503184713376,25.65416666666667
+Desh Darpan,True,True,True,True,True,True,0,9.137962962962959,19.483928571428578
+Swatantra Vani,True,True,True,True,True,True,0,6.889285714285705,17.08
+Rashtra Jyoti,True,True,True,True,True,True,0,5.464634146341467,20.19999999999999
+Nav Jagran,True,True,True,True,True,True,91.0,36.77615894039734,48.365833333333356
+Hindustan Today Private Limited,True,True,True,True,True,True,0,4.752564102564108,13.823333333333338
+Lok Samachar,True,True,True,True,True,True,0,9.125423728813558,22.13000000000001
+Janvadi Patrika,True,True,True,True,True,True,0,5.898888888888891,13.177777777777777
+Desh Sandesh,True,True,True,True,True,True,0,8.166666666666671,18.688888888888883
+Navaz Today,True,True,True,True,True,True,95.0,29.558433734939754,43.802830188679245
+Janvani Patrika,True,True,True,True,True,True,0,4.562037037037044,12.826086956521749
+Akhil Bharat Darpan,True,False,True,True,True,True,0,6.307352941176475,14.012500000000003
+Swapan Srushti,True,True,True,True,True,True,0,1.6875,10.433333333333337
+Samaj Sandesh,True,True,True,True,True,True,0,8.043511450381686,12.8735632183908
+Prakash Pathak,True,True,True,True,True,True,0,7.599999999999994,18.145454545454555
+Bharat Awaaz,True,True,True,True,True,True,0,23.39722222222224,28.313095238095244
+Swabhiman Patrika,True,True,True,True,True,True,0,5.152564102564099,12.952941176470588
+Lok Jagriti,True,True,True,True,True,True,0,7.047916666666666,13.319607843137248
+Bhavya Bhaskar,True,True,True,True,True,True,0,4.785937500000003,17.842857142857156

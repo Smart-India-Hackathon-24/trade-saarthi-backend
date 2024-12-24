@@ -132,7 +132,7 @@ def calculate_dynamic_impacts(fuzzy_scores, title):
     Calculate dynamic impact weights based on the distribution of scores
     """
     if not fuzzy_scores:
-        return 0.0
+        return 100.0
 
     total_count = len(fuzzy_scores)
 
